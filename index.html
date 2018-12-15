@@ -1,0 +1,44 @@
+<head>
+ <style>
+   textarea{
+     background: lightblue;
+   }
+   #mainDynamicModule{
+     width: 50%;
+     height: 200px;
+   }
+   #secondDynamicModule{
+     width: 50%;
+     height: 200px;
+   }
+ </style>
+</head>
+
+<body>
+    <script type="module">
+      // const worker = new Worker('worker-test.js', {type:"module"})
+    </script>
+  <script type="module" src="./index.js"></script>
+  
+  <div>mainDynamicModule (main.js)</div>
+  <textarea id="mainDynamicModule">
+    import {cube, union} from '@jscad/core'
+    import {foo} from '../foo.js'
+    import culu from '/zborg/other.js'
+
+    foo()
+    console.log('Hi, i am a dynamic module')
+
+    console.log('oh yeah', culu, cube(), union())
+    import('/zborg/other.js')
+      .then(x=> console.log('ssdf', x))
+  </textarea>
+  <button id="createModule">create module </button>
+
+  <div>secondDynamicModule (other.js)</div>
+  <textarea id="secondDynamicModule">
+      export default 42
+  </textarea>
+  <div id="consoleOut"></div>
+  
+</body>
