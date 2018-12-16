@@ -12,7 +12,7 @@ const builtIns = {
 
 let modules = { ...builtIns }
 
-self.addEventListener('message', function (event) {
+self.addEventListener('message', async function (event) {
   // console.log('SW Received Message: ', event.data.name, event.data.source)
   // event.ports[0].postMessage("SW Says 'Hello back!'")
   if (event.data.name && event.data.name === 'reset') {
@@ -21,6 +21,7 @@ self.addEventListener('message', function (event) {
     modules[event.data.name] = event.data.source
     // console.log('modules', modules)
   }
+  // console.log('caches', caches, Cache, CacheStorage)
 })
 
 self.addEventListener('fetch', (event) => {
@@ -30,11 +31,13 @@ self.addEventListener('fetch', (event) => {
   // console.log('event', url)
   if (url.includes('zborg') || url.includes('/@jscad')) {
     const module = modules[path]
-    // console.log('module', path,  module)
+    console.log('loading module', path, module)
     event.respondWith(
       new Promise((resolve, reject) => {
         const headers = new Headers({
-          'Content-Type': 'application/javascript'
+          'Content-Type': 'application/javascript',
+          'Cache-Control': 'no-store', // 'no-cache', // attempt at forced invalidation
+          'Expires': 'Wed, 21 Oct 2015 07:28:00 GMT' // same
         })
         resolve(new Response(module, { headers }))
       })

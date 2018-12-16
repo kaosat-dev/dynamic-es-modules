@@ -11,6 +11,11 @@
      width: 50%;
      height: 200px;
    }
+
+   #createModule{
+     background: indigo;
+     color: white;
+   } 
  </style>
 </head>
 
@@ -19,21 +24,21 @@
       // const worker = new Worker('worker-test.js', {type:"module"})
     </script>
   <script type="module" src="./index.js"></script>
-  
+  <button id="createModule">create & load modules</button>
   <div>mainDynamicModule (main.js)</div>
   <textarea id="mainDynamicModule">
     import {cube, union} from '@jscad/core'
     import {foo} from '../foo.js'
     import culu from '/zborg/other.js'
 
-    foo()
-    console.log('Hi, i am a dynamic module')
-
-    console.log('oh yeah', culu, cube(), union())
-    import('/zborg/other.js')
-      .then(x=> console.log('ssdf', x))
+    const main = () => {
+      foo()
+      console.log('from other modules', culu, cube(), union())
+      import('/zborg/other.js').then(x=> console.log('dynamic import', x))
+    }
+    export {main}
   </textarea>
-  <button id="createModule">create module </button>
+  
 
   <div>secondDynamicModule (other.js)</div>
   <textarea id="secondDynamicModule">
